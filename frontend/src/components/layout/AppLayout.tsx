@@ -37,7 +37,7 @@ export const ratingColor = (rating: number | null): string => {
 interface AppLayoutProps { children: React.ReactNode }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

@@ -1,7 +1,7 @@
 /**
  * src/pages/ContestArena.tsx
  * ───────────────────────────
- * Live contest room — the centrepiece of CP Arena.
+ * Live contest room — the centrepiece of Algo Forge.
  *
  * Layout:
  *  ┌─ Left Column (1/3) ────────────────────────────────────────┐
@@ -64,7 +64,7 @@ const PhaseBadge = ({ phase }: { phase: string }) => {
   const map: Record<string, string> = {
     ongoing:  'text-emerald-400 bg-emerald-500/15 border-emerald-500/25',
     upcoming: 'text-amber-400   bg-amber-500/15   border-amber-500/25',
-    ended:    'text-slate-400   bg-slate-500/15   border-slate-500/25',
+    ended:    'text-zinc-500   bg-slate-500/15   border-slate-500/25',
   };
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${map[phase] ?? map.ended}`}>
@@ -111,9 +111,9 @@ const ProblemCell = ({ result }: { result?: ProblemResult }) => {
 // ─── Rank badge ───────────────────────────────────────────────────────────────
 const RankBadge = ({ rank }: { rank: number }) => {
   if (rank === 1) return <span className="text-amber-400 font-black text-sm">🥇</span>;
-  if (rank === 2) return <span className="text-slate-300 font-black text-sm">🥈</span>;
+  if (rank === 2) return <span className="text-zinc-300 font-black text-sm">🥈</span>;
   if (rank === 3) return <span className="text-amber-600 font-black text-sm">🥉</span>;
-  return <span className="text-slate-400 font-bold text-sm font-mono">#{rank}</span>;
+  return <span className="text-zinc-500 font-bold text-sm font-mono">#{rank}</span>;
 };
 
 // ─── Leaderboard Table ────────────────────────────────────────────────────────
@@ -125,10 +125,10 @@ interface LeaderboardTableProps {
 const LeaderboardTable = ({ entries, problemIds }: LeaderboardTableProps) => {
   if (entries.length === 0) {
     return (
-      <div className="glass rounded-2xl py-16 text-center">
+      <div className="glass rounded-md py-16 text-center">
         <Trophy size={40} className="mx-auto mb-4 text-slate-700 opacity-50" />
-        <p className="text-slate-500">No submissions yet.</p>
-        <p className="text-slate-600 text-sm mt-1">
+        <p className="text-zinc-600">No submissions yet.</p>
+        <p className="text-zinc-700 text-sm mt-1">
           Sync Codeforces submissions to populate the leaderboard.
         </p>
       </div>
@@ -136,36 +136,36 @@ const LeaderboardTable = ({ entries, problemIds }: LeaderboardTableProps) => {
   }
 
   return (
-    <div className="glass rounded-2xl overflow-hidden">
+    <div className="glass rounded-md overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-              <th className="px-4 py-3 text-left text-slate-400 font-semibold text-xs uppercase tracking-wider w-16">
+            <tr className="border-b border-zinc-800 bg-white/[0.02]">
+              <th className="px-4 py-3 text-left text-zinc-500 font-semibold text-xs uppercase tracking-wider w-16">
                 Rank
               </th>
-              <th className="px-4 py-3 text-left text-slate-400 font-semibold text-xs uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-zinc-500 font-semibold text-xs uppercase tracking-wider">
                 Handle
               </th>
-              <th className="px-4 py-3 text-center text-slate-400 font-semibold text-xs uppercase tracking-wider w-16">
+              <th className="px-4 py-3 text-center text-zinc-500 font-semibold text-xs uppercase tracking-wider w-16">
                 Solved
               </th>
-              <th className="px-4 py-3 text-center text-slate-400 font-semibold text-xs uppercase tracking-wider w-20">
+              <th className="px-4 py-3 text-center text-zinc-500 font-semibold text-xs uppercase tracking-wider w-20">
                 Penalty
               </th>
               {/* Per-problem columns */}
               {problemIds.map((pid, i) => (
                 <th key={pid}
-                    className="px-3 py-3 text-center text-slate-400 font-semibold text-xs uppercase tracking-wider w-20">
+                    className="px-3 py-3 text-center text-zinc-500 font-semibold text-xs uppercase tracking-wider w-20">
                   <a
                     href={`https://codeforces.com/problemset/problem/${pid.match(/^(\d+)/)?.[1]}/${pid.replace(/^\d+/, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-violet-400 hover:text-violet-300 transition-colors"
+                    className="font-mono text-blue-400 hover:text-blue-300 transition-colors"
                   >
                     {String.fromCharCode(65 + i)}
                   </a>
-                  <div className="text-[9px] text-slate-600 font-mono">{pid}</div>
+                  <div className="text-[9px] text-zinc-700 font-mono">{pid}</div>
                 </th>
               ))}
             </tr>
@@ -178,7 +178,7 @@ const LeaderboardTable = ({ entries, problemIds }: LeaderboardTableProps) => {
               return (
                 <tr
                   key={entry.handle}
-                  className={`border-b border-white/[0.03] transition-colors
+                  className={`border-b border-zinc-800 transition-colors
                                ${isTopThree ? 'bg-amber-500/[0.03]' : ''}
                                hover:bg-white/[0.04]`}
                 >
@@ -196,21 +196,21 @@ const LeaderboardTable = ({ entries, problemIds }: LeaderboardTableProps) => {
 
                   {/* Handle */}
                   <td className="px-4 py-3">
-                    <span className={`font-semibold ${isTopThree ? 'text-white' : 'text-slate-200'}`}>
+                    <span className={`font-semibold ${isTopThree ? 'text-white' : 'text-zinc-200'}`}>
                       {entry.handle}
                     </span>
                   </td>
 
                   {/* Solved */}
                   <td className="px-4 py-3 text-center">
-                    <span className={`font-black text-lg ${entry.solved > 0 ? 'text-violet-400' : 'text-slate-600'}`}>
+                    <span className={`font-black text-lg ${entry.solved > 0 ? 'text-blue-400' : 'text-zinc-700'}`}>
                       {entry.solved}
                     </span>
                   </td>
 
                   {/* Penalty */}
                   <td className="px-4 py-3 text-center">
-                    <span className="font-mono text-slate-400 text-sm">
+                    <span className="font-mono text-zinc-500 text-sm">
                       {entry.totalPenalty}
                     </span>
                   </td>
@@ -329,8 +329,8 @@ const ContestArena = () => {
           <div className="h-8 bg-white/8 rounded-full w-72" />
           <div className="h-4 bg-white/8 rounded-full w-48" />
           <div className="grid lg:grid-cols-3 gap-6 mt-6">
-            <div className="h-64 bg-white/8 rounded-2xl" />
-            <div className="lg:col-span-2 h-64 bg-white/8 rounded-2xl" />
+            <div className="h-64 bg-white/8 rounded-md" />
+            <div className="lg:col-span-2 h-64 bg-white/8 rounded-md" />
           </div>
         </div>
       </AppLayout>
@@ -366,7 +366,7 @@ const ContestArena = () => {
         {/* ── Back + Header ─────────────────────────────────────────── */}
         <div className="mb-6">
           <button onClick={() => navigate('/contests')}
-                  className="flex items-center gap-1.5 text-slate-500 hover:text-slate-300 text-sm mb-4 transition-colors">
+                  className="flex items-center gap-1.5 text-zinc-600 hover:text-zinc-300 text-sm mb-4 transition-colors">
             <ChevronLeft size={15} /> All contests
           </button>
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -381,7 +381,7 @@ const ContestArena = () => {
               </div>
               <h1 className="text-3xl font-black text-white">{contest?.title}</h1>
               {contest?.description && (
-                <p className="text-slate-400 text-sm mt-1">{contest.description}</p>
+                <p className="text-zinc-500 text-sm mt-1">{contest.description}</p>
               )}
             </div>
 
@@ -391,7 +391,7 @@ const ContestArena = () => {
               disabled={syncLoading}
               id="sync-submissions-btn"
               className={`btn-primary gap-2 !px-5 !py-3 text-sm relative overflow-hidden
-                          ${syncSuccess ? '!from-emerald-600 !to-emerald-500 shadow-glow-cyan' : ''}`}
+                          ${syncSuccess ? '!from-emerald-600 !to-emerald-500 ' : ''}`}
             >
               {syncLoading ? (
                 <><Loader2 size={16} className="animate-spin" /> Syncing CF…</>
@@ -419,13 +419,13 @@ const ContestArena = () => {
           <div className="space-y-4">
 
             {/* Countdown */}
-            <div className={`glass rounded-2xl p-5 border
+            <div className={`glass rounded-md p-5 border
                              ${phase === 'ongoing'
-                               ? 'border-violet-500/25 bg-gradient-to-br from-violet-600/5 to-indigo-600/5'
-                               : 'border-white/[0.04]'}`}>
+                               ? 'border-zinc-700 bg-transparent to-indigo-600/5'
+                               : 'border-zinc-800'}`}>
               <div className="flex items-center gap-2 mb-3">
-                <Clock size={16} className={phase === 'ongoing' ? 'text-violet-400' : 'text-slate-500'} />
-                <span className="text-slate-400 text-sm font-medium">
+                <Clock size={16} className={phase === 'ongoing' ? 'text-blue-400' : 'text-zinc-600'} />
+                <span className="text-zinc-500 text-sm font-medium">
                   {phase === 'upcoming' ? 'Starts in'
                    : phase === 'ongoing' ? 'Time remaining'
                    : 'Contest ended'}
@@ -433,21 +433,21 @@ const ContestArena = () => {
               </div>
               {phase !== 'ended' ? (
                 <div className={`text-4xl font-black font-mono tracking-tight
-                                 ${isOver ? 'text-slate-500' : phase === 'ongoing' ? 'text-violet-300 animate-pulse-glow' : 'text-amber-300'}`}>
+                                 ${isOver ? 'text-zinc-600' : phase === 'ongoing' ? 'text-blue-300 animate-pulse-glow' : 'text-amber-300'}`}>
                   {remaining || '--:--:--'}
                 </div>
               ) : (
-                <p className="text-slate-400 text-lg font-semibold">Finished</p>
+                <p className="text-zinc-500 text-lg font-semibold">Finished</p>
               )}
               {phase === 'ongoing' && (
-                <p className="text-slate-600 text-xs mt-2">
+                <p className="text-zinc-700 text-xs mt-2">
                   Leaderboard auto-refreshes every 30s
                 </p>
               )}
             </div>
 
             {/* Contest meta */}
-            <div className="glass rounded-2xl p-5 space-y-3">
+            <div className="glass rounded-md p-5 space-y-3">
               <h3 className="text-white font-semibold text-sm mb-3">Contest Info</h3>
               <div className="space-y-2.5 text-sm">
                 {[
@@ -470,22 +470,22 @@ const ContestArena = () => {
                   },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex items-center justify-between">
-                    <span className="text-slate-500">{label}</span>
-                    <span className="text-slate-200 font-medium">{value}</span>
+                    <span className="text-zinc-600">{label}</span>
+                    <span className="text-zinc-200 font-medium">{value}</span>
                   </div>
                 ))}
 
                 {/* Invite code */}
                 {contest?.inviteCode && (
-                  <div className="pt-2 border-t border-white/[0.05]">
-                    <p className="text-slate-500 text-xs mb-1.5">Invite Code</p>
+                  <div className="pt-2 border-t border-zinc-800">
+                    <p className="text-zinc-600 text-xs mb-1.5">Invite Code</p>
                     <div className="flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
                       <span className="font-mono font-bold text-amber-300 tracking-widest text-sm flex-1">
                         {contest.inviteCode}
                       </span>
                       <button
                         onClick={() => navigator.clipboard.writeText(contest.inviteCode!)}
-                        className="text-slate-500 hover:text-slate-300 transition-colors text-xs"
+                        className="text-zinc-600 hover:text-zinc-300 transition-colors text-xs"
                       >
                         Copy
                       </button>
@@ -496,9 +496,9 @@ const ContestArena = () => {
             </div>
 
             {/* Problem shortcuts */}
-            <div className="glass rounded-2xl p-5">
+            <div className="glass rounded-md p-5">
               <h3 className="text-white font-semibold text-sm mb-3 flex items-center gap-2">
-                <Hash size={14} className="text-violet-400" />
+                <Hash size={14} className="text-blue-400" />
                 Problems
               </h3>
               <div className="space-y-2">
@@ -510,21 +510,21 @@ const ContestArena = () => {
                       href={cfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/8 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-sm hover:bg-white/8 transition-colors group"
                     >
-                      <span className="w-6 h-6 rounded-lg bg-violet-500/20 flex items-center justify-center
-                                       text-violet-400 font-bold text-xs shrink-0">
+                      <span className="w-6 h-6 rounded-lg bg-zinc-800/60 flex items-center justify-center
+                                       text-blue-400 font-bold text-xs shrink-0">
                         {String.fromCharCode(65 + i)}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-slate-200 text-xs font-medium group-hover:text-white transition-colors truncate">
+                        <p className="text-zinc-200 text-xs font-medium group-hover:text-white transition-colors truncate">
                           {p.name || p.problemId}
                         </p>
                         {p.rating > 0 && (
-                          <p className="text-slate-600 text-[10px] font-mono">{p.rating}</p>
+                          <p className="text-zinc-700 text-[10px] font-mono">{p.rating}</p>
                         )}
                       </div>
-                      <ExternalLink size={12} className="text-slate-700 group-hover:text-violet-400 shrink-0 transition-colors" />
+                      <ExternalLink size={12} className="text-slate-700 group-hover:text-blue-400 shrink-0 transition-colors" />
                     </a>
                   );
                 })}
@@ -538,13 +538,13 @@ const ContestArena = () => {
             {/* Leaderboard header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-violet-500/20 flex items-center justify-center">
-                  <Trophy size={16} className="text-violet-400" />
+                <div className="w-8 h-8 rounded-sm bg-zinc-800/60 flex items-center justify-center">
+                  <Trophy size={16} className="text-blue-400" />
                 </div>
                 <div>
                   <h2 className="text-white font-bold">Live Leaderboard</h2>
                   {lastUpdated && (
-                    <p className="text-slate-600 text-xs">
+                    <p className="text-zinc-700 text-xs">
                       Updated {new Date(lastUpdated).toLocaleTimeString()}
                     </p>
                   )}
@@ -554,7 +554,7 @@ const ContestArena = () => {
               <div className="flex items-center gap-3">
                 {/* Stats */}
                 {stats && (
-                  <div className="hidden sm:flex items-center gap-4 text-xs text-slate-500">
+                  <div className="hidden sm:flex items-center gap-4 text-xs text-zinc-600">
                     <span className="flex items-center gap-1">
                       <Users size={12} />
                       {(stats as { totalParticipants?: number }).totalParticipants ?? 0} participants
@@ -573,13 +573,13 @@ const ContestArena = () => {
                   className="btn-ghost !px-3 !py-2"
                   title="Refresh leaderboard"
                 >
-                  <RefreshCw size={14} className={lbLoading ? 'animate-spin text-violet-400' : ''} />
+                  <RefreshCw size={14} className={lbLoading ? 'animate-spin text-blue-400' : ''} />
                 </button>
               </div>
             </div>
 
             {/* Legend */}
-            <div className="flex flex-wrap gap-4 text-xs text-slate-500">
+            <div className="flex flex-wrap gap-4 text-xs text-zinc-600">
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/30" />
                 Accepted (+Mm = time, +W = wrong attempts)
@@ -592,19 +592,19 @@ const ContestArena = () => {
 
             {/* Table */}
             {lbLoading && leaderboard.length === 0 ? (
-              <div className="glass rounded-2xl p-8 text-center">
-                <Loader2 size={24} className="mx-auto animate-spin text-violet-400 mb-3" />
-                <p className="text-slate-500 text-sm">Loading leaderboard…</p>
+              <div className="glass rounded-md p-8 text-center">
+                <Loader2 size={24} className="mx-auto animate-spin text-blue-400 mb-3" />
+                <p className="text-zinc-600 text-sm">Loading leaderboard…</p>
               </div>
             ) : (
               <LeaderboardTable entries={leaderboard} problemIds={problemIds} />
             )}
 
             {/* Sync hint */}
-            <div className="glass rounded-xl px-4 py-3 flex items-center gap-3 text-xs text-slate-500">
+            <div className="glass rounded-sm px-4 py-3 flex items-center gap-3 text-xs text-zinc-600">
               <RotateCcw size={13} className="text-violet-500 shrink-0" />
               <p>
-                Click <strong className="text-slate-300">Sync Codeforces</strong> to pull the latest
+                Click <strong className="text-zinc-300">Sync Codeforces</strong> to pull the latest
                 submissions from each participant's CF account. Sync respects CF API rate limits (1 req/s per handle).
               </p>
             </div>

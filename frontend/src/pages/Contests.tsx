@@ -40,7 +40,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   const map: Record<string, string> = {
     ongoing:  'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
     upcoming: 'bg-amber-500/15   text-amber-400   border-amber-500/20',
-    ended:    'bg-slate-500/15   text-slate-400   border-slate-500/20',
+    ended:    'bg-slate-500/15   text-zinc-500   border-slate-500/20',
   };
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${map[status] ?? map.ended}`}>
@@ -58,9 +58,9 @@ const ContestCard = ({ contest, onClick }: { contest: Contest; onClick: () => vo
   return (
     <div
       onClick={onClick}
-      className="glass rounded-2xl p-5 hover:bg-white/[0.06] transition-all duration-200
-                 cursor-pointer group border border-white/[0.04] hover:border-violet-500/20
-                 hover:shadow-glow-purple"
+      className="glass rounded-md p-5 hover:bg-white/[0.06] transition-all duration-200
+                 cursor-pointer group border border-zinc-800 hover:border-zinc-700
+                 hover:"
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
@@ -68,18 +68,18 @@ const ContestCard = ({ contest, onClick }: { contest: Contest; onClick: () => vo
             <StatusBadge status={status} />
             {contest.isPrivate
               ? <Lock size={12} className="text-amber-400" />
-              : <Unlock size={12} className="text-slate-600" />
+              : <Unlock size={12} className="text-zinc-400" />
             }
           </div>
-          <h3 className="text-white font-bold text-base line-clamp-1 group-hover:text-violet-200 transition-colors">
+          <h3 className="text-white font-bold text-base line-clamp-1 group-hover:text-zinc-100 transition-colors">
             {contest.title}
           </h3>
         </div>
-        <ChevronRight size={16} className="text-slate-600 group-hover:text-violet-400 shrink-0 mt-1 transition-colors" />
+        <ChevronRight size={16} className="text-zinc-500 group-hover:text-blue-400 shrink-0 mt-1 transition-colors" />
       </div>
 
       {/* Meta */}
-      <div className="flex flex-wrap gap-3 text-xs text-slate-500 mb-3">
+      <div className="flex flex-wrap gap-3 text-xs text-zinc-400 mb-3">
         <span className="flex items-center gap-1.5">
           <Calendar size={12} />
           {formatDate(contest.startTime)}
@@ -102,12 +102,12 @@ const ContestCard = ({ contest, onClick }: { contest: Contest; onClick: () => vo
       <div className="flex flex-wrap gap-1.5">
         {contest.problems.slice(0, 6).map((p) => (
           <span key={p.problemId}
-                className="font-mono text-xs px-2 py-0.5 rounded-md bg-white/[0.05] text-slate-400">
+                className="font-mono text-xs px-2 py-0.5 rounded-sm bg-zinc-800 border border-zinc-700 text-zinc-300">
             {p.problemId}
           </span>
         ))}
         {contest.problems.length > 6 && (
-          <span className="text-xs text-slate-600 px-1 self-center">
+          <span className="text-xs text-zinc-400 px-1 self-center">
             +{contest.problems.length - 6} more
           </span>
         )}
@@ -115,7 +115,7 @@ const ContestCard = ({ contest, onClick }: { contest: Contest; onClick: () => vo
 
       {/* Ongoing: show time left */}
       {status === 'ongoing' && (
-        <div className="mt-3 pt-3 border-t border-white/[0.05] flex items-center gap-2">
+        <div className="mt-3 pt-3 border-t border-zinc-800 flex items-center gap-2">
           <Clock size={12} className="text-emerald-400 animate-pulse" />
           <span className="text-emerald-400 text-xs font-semibold">
             {formatTimeLeft(contest.endTime)}
@@ -198,18 +198,18 @@ const CreateContestModal = ({ onClose, onCreated }: CreateModalProps) => {
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative glass-strong rounded-3xl w-full max-w-xl max-h-[90vh]
-                      overflow-y-auto scrollbar-hide shadow-card animate-fade-in-up">
+      <div className="relative glass-strong rounded-md w-full max-w-xl max-h-[90vh]
+                      overflow-y-auto scrollbar-hide  animate-fade-in-up">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-black text-white">Create Contest</h2>
-              <p className="text-slate-400 text-sm mt-0.5">Set up a custom ICPC-style mashup</p>
+              <p className="text-zinc-500 text-sm mt-0.5">Set up a custom ICPC-style mashup</p>
             </div>
             <button onClick={onClose}
-                    className="w-8 h-8 rounded-xl glass flex items-center justify-center
-                               text-slate-400 hover:text-white transition-colors">
+                    className="w-8 h-8 rounded-sm glass flex items-center justify-center
+                               text-zinc-500 hover:text-white transition-colors">
               <X size={16} />
             </button>
           </div>
@@ -249,7 +249,7 @@ const CreateContestModal = ({ onClose, onCreated }: CreateModalProps) => {
             {/* Problems */}
             <div>
               <label className="form-label">
-                Problems * <span className="text-slate-500 font-normal">({form.problems.length}/10)</span>
+                Problems * <span className="text-zinc-400 font-normal">({form.problems.length}/10)</span>
               </label>
               <div className="flex gap-2">
                 <input
@@ -266,7 +266,7 @@ const CreateContestModal = ({ onClose, onCreated }: CreateModalProps) => {
                   Add
                 </button>
               </div>
-              <p className="text-slate-500 text-xs mt-1.5">
+              <p className="text-zinc-400 text-xs mt-1.5">
                 Comma-separated CF problem IDs. Press Enter or click Add.
               </p>
 
@@ -275,8 +275,8 @@ const CreateContestModal = ({ onClose, onCreated }: CreateModalProps) => {
                 <div className="flex flex-wrap gap-2 mt-3">
                   {form.problems.map((pid) => (
                     <span key={pid}
-                          className="inline-flex items-center gap-1.5 bg-violet-500/15 text-violet-300
-                                     border border-violet-500/20 rounded-lg px-2.5 py-1 text-xs font-mono font-semibold">
+                          className="inline-flex items-center gap-1.5 bg-zinc-800/60 text-blue-300
+                                     border border-zinc-700 rounded-lg px-2.5 py-1 text-xs font-mono font-semibold">
                       {pid}
                       <button type="button" onClick={() => removeProblem(pid)}
                               className="hover:text-red-400 transition-colors">
@@ -305,7 +305,7 @@ const CreateContestModal = ({ onClose, onCreated }: CreateModalProps) => {
                   type="button"
                   onClick={() => setForm((p) => ({ ...p, isPrivate: !p.isPrivate }))}
                   className={`w-full input-field text-sm flex items-center gap-2 justify-center cursor-pointer
-                              ${form.isPrivate ? 'border-amber-500/40 text-amber-300' : 'text-slate-300'}`}
+                              ${form.isPrivate ? 'border-amber-500/40 text-amber-300' : 'text-zinc-300'}`}
                 >
                   {form.isPrivate ? <><Lock size={14} /> Private</> : <><Unlock size={14} /> Public</>}
                 </button>
@@ -357,11 +357,11 @@ const JoinPrivateModal = ({ onClose, onJoined }: JoinModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative glass-strong rounded-3xl w-full max-w-sm shadow-card animate-fade-in-up p-6">
+      <div className="relative glass-strong rounded-md w-full max-w-sm  animate-fade-in-up p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-black text-white">Join Private Contest</h2>
           <button onClick={onClose}
-                  className="w-8 h-8 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-white">
+                  className="w-8 h-8 rounded-sm glass flex items-center justify-center text-zinc-500 hover:text-white">
             <X size={16} />
           </button>
         </div>
@@ -457,7 +457,7 @@ const Contests = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-black text-white mb-1">Contests</h1>
-            <p className="text-slate-400 text-sm">
+            <p className="text-zinc-500 text-sm">
               Browse, create, and compete in custom ICPC mashups.
             </p>
           </div>
@@ -476,15 +476,15 @@ const Contests = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 p-1 glass rounded-xl w-fit mb-6">
+        <div className="flex gap-1 p-1 border border-zinc-800 rounded-sm w-fit mb-6">
           {TABS.map(({ id, label }) => (
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
+              className={`px-4 py-2 rounded-sm text-sm font-medium transition-colors duration-150
                           ${tab === id
-                            ? 'bg-violet-600 text-white shadow-glow-purple'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'}`}
+                            ? 'bg-blue-600 text-white'
+                            : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'}`}
             >
               {label}
             </button>
@@ -509,7 +509,7 @@ const Contests = () => {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="glass rounded-2xl p-5 space-y-3 animate-pulse">
+              <div key={i} className="glass rounded-md p-5 space-y-3 animate-pulse">
                 <div className="h-4 bg-white/8 rounded-full w-20" />
                 <div className="h-5 bg-white/8 rounded-full w-3/4" />
                 <div className="h-3 bg-white/8 rounded-full w-1/2" />
@@ -517,11 +517,11 @@ const Contests = () => {
             ))}
           </div>
         ) : contests.length === 0 ? (
-          <div className="glass rounded-2xl py-20 text-center">
-            <Trophy size={40} className="mx-auto mb-4 text-slate-700" />
-            <p className="text-slate-500 mb-2">No contests found.</p>
+          <div className="glass rounded-md py-20 text-center">
+            <Trophy size={40} className="mx-auto mb-4 text-zinc-400" />
+            <p className="text-zinc-400 mb-2">No contests found.</p>
             {tab !== 'active' && (
-              <button onClick={() => setTab('active')} className="text-violet-400 hover:text-violet-300 text-sm">
+              <button onClick={() => setTab('active')} className="text-blue-400 hover:text-blue-300 text-sm">
                 Browse active contests →
               </button>
             )}

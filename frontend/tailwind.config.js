@@ -7,7 +7,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // ─── CP Arena Brand Colors ────────────────────────────────────────────────
+      // ─── Algo Forge Brand Colors ──────────────────────────────────────────────
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

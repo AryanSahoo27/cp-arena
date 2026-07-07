@@ -1,7 +1,7 @@
 /**
  * src/utils/api.ts
  * ─────────────────
- * Typed fetch wrapper for the CP Arena backend.
+ * Typed fetch wrapper for the Algo Forge backend.
  *
  * Features:
  *  - Auto-attaches Bearer JWT from localStorage

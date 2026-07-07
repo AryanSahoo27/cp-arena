@@ -30,6 +30,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { ratingColor } from '@/components/layout/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import api from '@/utils/api';
+import { useCodeforcesStats } from '@/hooks/useCodeforcesStats';
 import type { Contest } from '@/types';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -54,34 +55,36 @@ interface HeatmapDay {
 
 // ─── CF Rank title helper ─────────────────────────────────────────────────────
 const cfRankTitle = (rating: number | null | undefined): { title: string; color: string } => {
-  if (!rating) return { title: 'Unrated',        color: 'text-slate-400' };
-  if (rating < 1200) return { title: 'Newbie',    color: 'text-slate-300' };
+  if (!rating) return { title: 'Unrated',        color: 'text-zinc-500' };
+  if (rating < 1200) return { title: 'Newbie',    color: 'text-zinc-300' };
   if (rating < 1400) return { title: 'Pupil',     color: 'text-green-400' };
   if (rating < 1600) return { title: 'Specialist', color: 'text-cyan-400' };
   if (rating < 1900) return { title: 'Expert',    color: 'text-blue-400'  };
-  if (rating < 2100) return { title: 'Candidate Master', color: 'text-violet-400' };
+  if (rating < 2100) return { title: 'Candidate Master', color: 'text-blue-400' };
   if (rating < 2400) return { title: 'Master',   color: 'text-amber-400'  };
   return                     { title: 'Grandmaster', color: 'text-red-400' };
 };
 
-// ─── Stat Card ────────────────────────────────────────────────────────────────
+// ── Stat Card ────────────────────────────────────────────────────────────────
 const StatCard = ({
-  icon: Icon, label, value, sub, gradient, iconBg, iconColor,
+  icon: Icon, label, value, sub, iconBg, iconColor, valueColor,
 }: {
   icon: React.ElementType; label: string; value: string | number;
-  sub?: string; gradient: string; iconBg: string; iconColor: string;
+  sub?: string; gradient?: string; iconBg: string; iconColor: string; valueColor: string;
 }) => (
-  <div className={`glass rounded-2xl p-5 bg-gradient-to-br ${gradient}
-                   border border-white/[0.04] hover:border-white/[0.08] transition-all duration-200 group`}>
-    <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center mb-4
-                     group-hover:scale-110 transition-transform duration-200`}>
+  <div className="border border-zinc-800 rounded-sm p-5 hover:border-zinc-600 transition-colors duration-150 group">
+    <div className={`w-10 h-10 rounded-sm ${iconBg} flex items-center justify-center mb-4
+                     group-hover:scale-105 transition-transform duration-150`}>
       <Icon size={20} className={iconColor} />
     </div>
-    <p className="text-slate-500 text-xs uppercase tracking-wider font-medium mb-1">{label}</p>
-    <p className="text-3xl font-black text-white">{value}</p>
-    {sub && <p className="text-slate-600 text-xs mt-1">{sub}</p>}
+    {/* Label — bright, crisp, all-caps */}
+    <p className="text-zinc-200 text-sm font-semibold tracking-widest uppercase mb-1">{label}</p>
+    {/* Value — large monospace, context-coloured */}
+    <p className={`text-3xl font-mono font-bold ${valueColor}`}>{value}</p>
+    {sub && <p className="text-zinc-400 text-xs mt-1">{sub}</p>}
   </div>
 );
+
 
 // ─── Custom Recharts Tooltip ──────────────────────────────────────────────────
 const RatingTooltip = ({
@@ -94,12 +97,12 @@ const RatingTooltip = ({
   const d = payload[0].payload;
   const { title, color } = cfRankTitle(d.rating);
   return (
-    <div className="glass-strong rounded-xl p-3 shadow-card text-xs min-w-[160px]">
-      <p className="text-slate-400 mb-1">{new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+    <div className="glass-strong rounded-sm p-3  text-xs min-w-[160px]">
+      <p className="text-zinc-500 mb-1">{new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
       <p className={`text-lg font-black ${color}`}>{d.rating}</p>
       <p className={`text-xs ${color} mb-1`}>{title}</p>
-      {d.contestName && <p className="text-slate-400 text-[11px] truncate">🏆 {d.contestName}</p>}
-      {d.rank && <p className="text-slate-500 text-[11px]">Rank: #{d.rank}</p>}
+      {d.contestName && <p className="text-zinc-500 text-[11px] truncate">🏆 {d.contestName}</p>}
+      {d.rank && <p className="text-zinc-400 text-[11px]">Rank: #{d.rank}</p>}
     </div>
   );
 };
@@ -150,14 +153,13 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
     }
   });
 
-  // Cell colour based on count
+ // Cell colour based on count
   const cellColor = (count: number): string => {
-    if (count === 0) return 'bg-white/[0.04] border border-white/[0.06]';
-    if (count === 1) return 'bg-violet-900/60 border border-violet-800/40';
-    if (count === 2) return 'bg-violet-700/70 border border-violet-600/40';
-    if (count === 3) return 'bg-violet-600/80 border border-violet-500/50';
-    if (count === 4) return 'bg-violet-500    border border-violet-400/60';
-    return                  'bg-violet-400    border border-violet-300/70';
+    if (count === 0) return 'bg-white/[0.04] border border-zinc-800';
+    if (count === 1) return 'bg-green-900/60 border border-green-800/40';
+    if (count === 2) return 'bg-green-700/70 border border-green-600/40';
+    if (count === 3) return 'bg-green-500    border border-green-400/60';
+    return                  'bg-green-400    border border-green-300/70';
   };
 
   const toDateStr = (d: Date): string =>
@@ -166,14 +168,14 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
   const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="glass rounded-2xl p-6">
+    <div className="glass rounded-md p-6">
       <div className="flex items-center gap-3 mb-5">
-        <div className="w-8 h-8 rounded-xl bg-violet-500/20 flex items-center justify-center">
-          <Calendar size={16} className="text-violet-400" />
+        <div className="w-8 h-8 rounded-sm bg-zinc-800/60 flex items-center justify-center">
+          <Calendar size={16} className="text-blue-400" />
         </div>
         <div>
-          <h2 className="text-white font-bold">Submission Activity</h2>
-          <p className="text-slate-500 text-xs">Last 90 days of problem-solving activity</p>
+          <h2 className="text-white font-bold">Problem Solving Activity on Algo Forge</h2>
+          <p className="text-zinc-400 text-xs">Last 90 days of problem-solving activity</p>
         </div>
       </div>
 
@@ -184,7 +186,7 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
             {weeks.map((_, i) => {
               const ml = monthLabels.find((m) => m.colIndex === i);
               return (
-                <div key={i} className="w-[14px] text-[9px] text-slate-600 text-center">
+                <div key={i} className="w-[14px] text-[9px] text-zinc-400 text-center">
                   {ml?.label ?? ''}
                 </div>
               );
@@ -196,7 +198,7 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
             {/* Day labels */}
             <div className="flex flex-col gap-[3px] mr-1">
               {DAY_LABELS.map((d, i) => (
-                <div key={d} className="w-6 h-[14px] text-[9px] text-slate-600 flex items-center justify-end pr-1">
+                <div key={d} className="w-6 h-[14px] text-[9px] text-zinc-400 flex items-center justify-end pr-1">
                   {i % 2 === 1 ? d.slice(0, 1) : ''}
                 </div>
               ))}
@@ -218,7 +220,7 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
                       className={`
                         w-[14px] h-[14px] rounded-sm transition-all duration-150 cursor-default
                         ${isFuture ? 'opacity-0 pointer-events-none' : cellColor(count)}
-                        ${hoveredDay?.date === dateStr ? 'ring-1 ring-violet-400 scale-110' : ''}
+                        ${hoveredDay?.date === dateStr ? 'ring-1 ring-green-400 scale-110' : ''}
                       `}
                     />
                   );
@@ -231,16 +233,16 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
 
       {/* Legend + hover tooltip row */}
       <div className="flex items-center justify-between mt-4">
-        <div className="flex items-center gap-2 text-[10px] text-slate-500">
+        <div className="flex items-center gap-2 text-[10px] text-zinc-400">
           <span>Less</span>
-          {['bg-white/[0.04]', 'bg-violet-900/60', 'bg-violet-700/70', 'bg-violet-500', 'bg-violet-400'].map((c, i) => (
+          {['bg-white/[0.04]', 'bg-green-900/60', 'bg-green-700/70', 'bg-green-500', 'bg-green-400'].map((c, i) => (
             <div key={i} className={`w-3 h-3 rounded-sm ${c} border border-white/10`} />
           ))}
           <span>More</span>
         </div>
 
         {hoveredDay && (
-          <div className="text-xs text-slate-400 animate-fade-in">
+          <div className="text-xs text-zinc-500 animate-fade-in">
             <span className="text-white font-semibold">{hoveredDay.count}</span>{' '}
             {hoveredDay.count === 1 ? 'submission' : 'submissions'} on{' '}
             {new Date(hoveredDay.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -255,10 +257,10 @@ const SubmissionHeatmap = ({ data }: { data: HeatmapDay[] }) => {
 const RatingChart = ({ data }: { data: RatingPoint[] }) => {
   if (data.length === 0) {
     return (
-      <div className="glass rounded-2xl p-6 flex flex-col items-center justify-center min-h-[260px]">
+      <div className="glass rounded-md p-6 flex flex-col items-center justify-center min-h-[260px]">
         <TrendingUp size={40} className="text-slate-700 mb-3" />
-        <p className="text-slate-500 font-medium text-sm">No rating history yet</p>
-        <p className="text-slate-600 text-xs mt-1">
+        <p className="text-zinc-400 font-medium text-sm">No rating history yet</p>
+        <p className="text-zinc-400 text-xs mt-1">
           Participate in Codeforces contests to build your rating graph.
         </p>
       </div>
@@ -279,11 +281,10 @@ const RatingChart = ({ data }: { data: RatingPoint[] }) => {
   const gradientId = 'ratingGrad';
 
   const gradientColorMap: Record<string, [string, string]> = {
-    'text-slate-300':  ['#94a3b8', '#94a3b830'],
+    'text-zinc-300':  ['#94a3b8', '#94a3b830'],
     'text-green-400':  ['#4ade80', '#4ade8030'],
     'text-cyan-400':   ['#22d3ee', '#22d3ee30'],
     'text-blue-400':   ['#60a5fa', '#60a5fa30'],
-    'text-violet-400': ['#a78bfa', '#a78bfa30'],
     'text-amber-400':  ['#fbbf24', '#fbbf2430'],
     'text-red-400':    ['#f87171', '#f8717130'],
   };
@@ -291,15 +292,15 @@ const RatingChart = ({ data }: { data: RatingPoint[] }) => {
   const [topColor, bottomColor] = gradientColorMap[color] ?? ['#a78bfa', '#a78bfa30'];
 
   return (
-    <div className="glass rounded-2xl p-6">
+    <div className="glass rounded-md p-6">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-violet-500/20 flex items-center justify-center">
-            <TrendingUp size={16} className="text-violet-400" />
+          <div className="w-8 h-8 rounded-sm bg-zinc-800/60 flex items-center justify-center">
+            <TrendingUp size={16} className="text-blue-400" />
           </div>
           <div>
             <h2 className="text-white font-bold">Rating Progression</h2>
-            <p className="text-slate-500 text-xs">{data.length} contests tracked</p>
+            <p className="text-zinc-400 text-xs">{data.length} contests tracked</p>
           </div>
         </div>
         <div className="text-right">
@@ -374,16 +375,16 @@ const RatingChart = ({ data }: { data: RatingPoint[] }) => {
 const RecentContests = ({ contests }: { contests: Contest[] }) => {
   if (contests.length === 0) {
     return (
-      <div className="glass rounded-2xl p-6 flex flex-col items-center justify-center min-h-[160px]">
+      <div className="glass rounded-md p-6 flex flex-col items-center justify-center min-h-[160px]">
         <Trophy size={32} className="text-slate-700 mb-3" />
-        <p className="text-slate-500 text-sm">No contests yet.</p>
+        <p className="text-zinc-400 text-sm">No contests yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="glass rounded-2xl overflow-hidden">
-      <div className="px-5 py-4 border-b border-white/[0.05]">
+    <div className="glass rounded-md overflow-hidden">
+      <div className="px-5 py-4 border-b border-zinc-800">
         <h3 className="text-white font-bold flex items-center gap-2">
           <Trophy size={15} className="text-amber-400" />
           Recent Contests
@@ -400,16 +401,16 @@ const RecentContests = ({ contests }: { contests: Contest[] }) => {
                 'bg-slate-600'
               }`} />
               <div className="flex-1 min-w-0">
-                <p className="text-slate-200 text-sm font-medium truncate">{c.title}</p>
-                <p className="text-slate-600 text-xs">
+                <p className="text-zinc-200 text-sm font-medium truncate">{c.title}</p>
+                <p className="text-zinc-400 text-xs">
                   {new Date(c.startTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-xs font-mono text-slate-400">
+                <p className="text-xs font-mono text-zinc-500">
                   {c.durationMinutes}m
                 </p>
-                <p className="text-xs text-slate-600">{c.problems.length} probs</p>
+                <p className="text-xs text-zinc-400">{c.problems.length} probs</p>
               </div>
             </div>
           );
@@ -423,12 +424,16 @@ const RecentContests = ({ contests }: { contests: Contest[] }) => {
 const Profile = () => {
   const { user } = useAuth();
 
+  // ── Live Codeforces stats (direct CF API) ────────────────────────────────
+  const cf = useCodeforcesStats(user?.codeforcesHandle);
+
   const [stats, setStats]       = useState<UserStats | null>(null);
   const [ratingHistory, setRatingHistory] = useState<RatingPoint[]>([]);
   const [heatmapData, setHeatmapData]     = useState<HeatmapDay[]>([]);
   const [recentContests, setRecentContests] = useState<Contest[]>([]);
   const [loading, setLoading]   = useState(true);
   const [copied, setCopied]     = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
 
   // ── Data fetch ──────────────────────────────────────────────────────────
   const fetchAll = useCallback(async () => {
@@ -491,6 +496,23 @@ const Profile = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
+  // ── Fetch Codeforces avatar independently ───────────────────────────────
+  useEffect(() => {
+    const handle = user?.codeforcesHandle;
+    if (!handle) return;
+
+    fetch(`https://codeforces.com/api/user.info?handles=${handle}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'OK' && data.result?.[0]?.titlePhoto) {
+          const rawUrl = data.result[0].titlePhoto as string;
+          const finalUrl = rawUrl.startsWith('//') ? 'https:' + rawUrl : rawUrl;
+          setAvatarUrl(finalUrl);
+        }
+      })
+      .catch(() => { /* silently fail — placeholder stays */ });
+  }, [user?.codeforcesHandle]);
+
   // ── Handle copy ─────────────────────────────────────────────────────────
   const copyHandle = () => {
     if (!user?.handle) return;
@@ -499,12 +521,13 @@ const Profile = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const { title, color: rankColor } = cfRankTitle(user?.codeforcesRating);
 
-  // ── Stats with fallbacks ─────────────────────────────────────────────────
+  // ── Stats: prefer backend → CF API → '—' ───────────────────────────────
+  const cfLoading = cf.loading;
   const displayStats = {
-    totalSolved:     stats?.totalSolved     ?? '—',
-    contestsEntered: stats?.contestsEntered ?? (recentContests.length || '—'),
+    // Backend is authoritative; fall back to live CF API; then '—'
+    totalSolved:     stats?.totalSolved     ?? (cfLoading ? '...' : (cf.solvedCount  !== null ? cf.solvedCount  : '—')),
+    contestsEntered: stats?.contestsEntered ?? (cfLoading ? '...' : (cf.contestCount !== null ? cf.contestCount : (recentContests.length || '—'))),
     currentStreak:   stats?.currentStreak   ?? '—',
     maxStreak:       stats?.maxStreak       ?? '—',
   };
@@ -514,7 +537,7 @@ const Profile = () => {
       <div className="p-6 max-w-5xl mx-auto page-enter">
 
         {/* ── Profile Header Card ─────────────────────────────────────── */}
-        <div className="relative glass rounded-3xl overflow-hidden mb-6">
+        <div className="relative glass rounded-md overflow-hidden mb-6">
           {/* Background gradient orbs */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute -top-16 -left-16 w-64 h-64 rounded-full blur-3xl opacity-15
@@ -528,11 +551,18 @@ const Profile = () => {
 
               {/* Avatar */}
               <div className="relative">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600
-                                flex items-center justify-center shadow-glow-purple-lg shrink-0">
-                  <span className="text-4xl font-black text-white select-none">
-                    {user?.handle?.[0]?.toUpperCase() ?? 'U'}
-                  </span>
+                <div className="w-20 h-20 rounded-md bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="Profile"
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  ) : (
+                    <span className="text-4xl font-black text-white select-none">
+                      {user?.handle?.[0]?.toUpperCase() ?? 'U'}
+                    </span>
+                  )}
                 </div>
                 {/* Online indicator */}
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500
@@ -548,11 +578,11 @@ const Profile = () => {
                   <button onClick={copyHandle}
                           className="p-1.5 rounded-lg glass hover:bg-white/10 transition-colors"
                           title="Copy handle">
-                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} className="text-slate-500" />}
+                    {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} className="text-zinc-400" />}
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                  <span className="flex items-center gap-1.5 text-slate-400">
+                  <span className="flex items-center gap-1.5 text-zinc-500">
                     <Mail size={13} /> {user?.email}
                   </span>
                   {user?.codeforcesHandle && (
@@ -560,29 +590,13 @@ const Profile = () => {
                       href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors"
+                      className="flex items-center gap-1.5 text-zinc-500 hover:text-cyan-400 transition-colors"
                     >
                       <Code2 size={13} /> {user.codeforcesHandle}
                     </a>
                   )}
                 </div>
               </div>
-
-              {/* Rating badge */}
-              {user?.codeforcesRating ? (
-                <div className="glass rounded-2xl px-5 py-4 text-center shrink-0">
-                  <p className={`text-3xl font-black ${ratingColor(user.codeforcesRating)}`}>
-                    {user.codeforcesRating}
-                  </p>
-                  <p className={`text-xs font-semibold mt-0.5 ${rankColor}`}>{title}</p>
-                  <p className="text-slate-600 text-[10px] mt-1">CF Rating</p>
-                </div>
-              ) : (
-                <div className="glass rounded-2xl px-5 py-4 text-center shrink-0">
-                  <p className="text-slate-600 text-sm font-medium">No CF rating</p>
-                  <p className="text-slate-700 text-xs mt-0.5">Link your CF handle</p>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -591,8 +605,8 @@ const Profile = () => {
         {loading ? (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="glass rounded-2xl p-5 space-y-3 animate-pulse">
-                <div className="h-8 w-8 bg-white/8 rounded-xl" />
+              <div key={i} className="glass rounded-md p-5 space-y-3 animate-pulse">
+                <div className="h-8 w-8 bg-white/8 rounded-sm" />
                 <div className="h-3 bg-white/8 rounded-full w-16" />
                 <div className="h-7 bg-white/8 rounded-full w-12" />
               </div>
@@ -605,51 +619,51 @@ const Profile = () => {
               label="Problems Solved"
               value={displayStats.totalSolved}
               sub="All time"
-              gradient="from-cyan-600/15 to-blue-600/15"
-              iconBg="bg-cyan-500/20"
-              iconColor="text-cyan-400"
+              iconBg="bg-blue-500/10"
+              iconColor="text-blue-400"
+              valueColor="text-blue-400"
             />
             <StatCard
               icon={Trophy}
               label="Contests"
               value={displayStats.contestsEntered}
               sub="Participated"
-              gradient="from-amber-600/15 to-orange-600/15"
-              iconBg="bg-amber-500/20"
-              iconColor="text-amber-400"
+              iconBg="bg-yellow-500/10"
+              iconColor="text-yellow-400"
+              valueColor="text-yellow-400"
             />
             <StatCard
               icon={Flame}
               label="Current Streak"
               value={displayStats.currentStreak === '—' ? '—' : `${displayStats.currentStreak}d`}
               sub="Days in a row"
-              gradient="from-red-600/15 to-orange-600/15"
-              iconBg="bg-red-500/20"
-              iconColor="text-red-400"
+              iconBg="bg-orange-500/10"
+              iconColor="text-orange-400"
+              valueColor="text-orange-400"
             />
             <StatCard
               icon={Star}
               label="Best Streak"
               value={displayStats.maxStreak === '—' ? '—' : `${displayStats.maxStreak}d`}
               sub="All-time record"
-              gradient="from-violet-600/15 to-indigo-600/15"
-              iconBg="bg-violet-500/20"
-              iconColor="text-violet-400"
+              iconBg="bg-amber-500/10"
+              iconColor="text-amber-400"
+              valueColor="text-amber-400"
             />
           </div>
         )}
 
         {/* ── Rating Chart ─────────────────────────────────────────────── */}
         {loading ? (
-          <div className="glass rounded-2xl p-6 mb-6 animate-pulse">
+          <div className="glass rounded-md p-6 mb-6 animate-pulse">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 bg-white/8 rounded-xl" />
+              <div className="w-8 h-8 bg-white/8 rounded-sm" />
               <div className="space-y-1.5">
                 <div className="h-4 bg-white/8 rounded-full w-32" />
                 <div className="h-3 bg-white/8 rounded-full w-20" />
               </div>
             </div>
-            <div className="h-[240px] bg-white/[0.03] rounded-xl" />
+            <div className="h-[240px] bg-white/[0.03] rounded-sm" />
           </div>
         ) : (
           <div className="mb-6">
@@ -659,8 +673,8 @@ const Profile = () => {
 
         {/* ── Heatmap ──────────────────────────────────────────────────── */}
         {loading ? (
-          <div className="glass rounded-2xl p-6 mb-6 animate-pulse">
-            <div className="h-24 bg-white/[0.03] rounded-xl" />
+          <div className="glass rounded-md p-6 mb-6 animate-pulse">
+            <div className="h-24 bg-white/[0.03] rounded-sm" />
           </div>
         ) : (
           <div className="mb-6">
@@ -672,9 +686,9 @@ const Profile = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Recent Contests */}
           {loading ? (
-            <div className="glass rounded-2xl p-6 animate-pulse space-y-3">
+            <div className="glass rounded-md p-6 animate-pulse space-y-3">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="h-10 bg-white/8 rounded-xl" />
+                <div key={i} className="h-10 bg-white/8 rounded-sm" />
               ))}
             </div>
           ) : (
@@ -682,9 +696,9 @@ const Profile = () => {
           )}
 
           {/* Quick links / account info card */}
-          <div className="glass rounded-2xl p-6 space-y-4">
+          <div className="glass rounded-md p-6 space-y-4">
             <h3 className="text-white font-bold flex items-center gap-2">
-              <User size={15} className="text-violet-400" />
+              <User size={15} className="text-blue-400" />
               Account Details
             </h3>
 
@@ -702,11 +716,11 @@ const Profile = () => {
               },
             ].map(({ label, value, icon: Icon }) => (
               <div key={label} className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2 text-slate-500 text-sm shrink-0">
+                <div className="flex items-center gap-2 text-zinc-400 text-sm shrink-0">
                   <Icon size={13} />
                   <span>{label}</span>
                 </div>
-                <span className="text-slate-200 text-sm font-medium text-right truncate max-w-[55%]">
+                <span className="text-zinc-200 text-sm font-medium text-right truncate max-w-[55%]">
                   {value}
                 </span>
               </div>

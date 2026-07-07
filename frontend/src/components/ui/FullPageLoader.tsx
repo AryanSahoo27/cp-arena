@@ -13,7 +13,7 @@ const FullPageLoader = () => (
       </div>
       {/* Spinner ring */}
       <div className="w-8 h-8 border-2 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
-      <p className="text-slate-500 text-sm animate-pulse">Loading CP Arena…</p>
+      <p className="text-slate-500 text-sm animate-pulse">Loading Algo Forge…</p>
     </div>
   </div>
 );

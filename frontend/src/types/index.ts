@@ -1,7 +1,7 @@
 /**
  * src/types/index.ts
  * ───────────────────
- * Shared TypeScript types for CP Arena frontend.
+ * Shared TypeScript types for Algo Forge frontend.
  */
 
 // ─── User ─────────────────────────────────────────────────────────────────────

@@ -1,12 +1,8 @@
 /**
  * src/pages/Register.tsx
  * ───────────────────────
- * Registration page with:
- *  - 5 fields: Handle, Email, Codeforces Handle, Password, Confirm Password
- *  - Real-time password strength indicator
- *  - Field-level validation feedback
- *  - Same premium split-panel layout as Login
- *  - Auto-redirect to /dashboard after successful registration
+ * Registration page — flat developer-tool aesthetic.
+ * State, validation, API calls, routing: unchanged.
  */
 
 import React, { useState, useId, useMemo } from 'react';
@@ -34,20 +30,20 @@ const getPasswordStrength = (pw: string): StrengthInfo => {
   if (/[^A-Za-z0-9]/.test(pw))           score++;
 
   const levels: StrengthInfo[] = [
-    { score: 0, label: '',         color: 'bg-slate-700',  width: 'w-0'    },
-    { score: 1, label: 'Weak',     color: 'bg-red-500',    width: 'w-1/4'  },
-    { score: 2, label: 'Fair',     color: 'bg-amber-500',  width: 'w-2/4'  },
-    { score: 3, label: 'Good',     color: 'bg-blue-500',   width: 'w-3/4'  },
-    { score: 4, label: 'Strong',   color: 'bg-emerald-500',width: 'w-full' },
+    { score: 0, label: '',         color: 'bg-zinc-800',  width: 'w-0'    },
+    { score: 1, label: 'Weak',     color: 'bg-red-500',   width: 'w-1/4'  },
+    { score: 2, label: 'Fair',     color: 'bg-amber-500', width: 'w-2/4'  },
+    { score: 3, label: 'Good',     color: 'bg-blue-500',  width: 'w-3/4'  },
+    { score: 4, label: 'Strong',   color: 'bg-green-500', width: 'w-full' },
   ];
 
   return levels[score] as StrengthInfo;
 };
 
-// ─── Animated Orb ─────────────────────────────────────────────────────────────
+// ─── Animated Orb — hidden in flat theme ─────────────────────────────────────
 const Orb = ({ size, color, className }: { size: number; color: string; className?: string }) => (
   <div
-    className={`absolute rounded-full pointer-events-none blur-[80px] opacity-20 ${className}`}
+    className={`hidden ${className}`}
     style={{ width: size, height: size, background: color }}
   />
 );
@@ -68,7 +64,7 @@ const Field = ({
     </label>
     {children}
     {hint && !error && (
-      <p className="mt-1.5 text-xs text-slate-500">{hint}</p>
+      <p className="mt-1.5 text-xs text-zinc-600">{hint}</p>
     )}
     {error && (
       <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
@@ -180,69 +176,54 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#050508] overflow-hidden">
+    <div className="min-h-screen flex bg-[#0a0a0a] overflow-hidden">
 
       {/* ── LEFT BRAND PANEL ───────────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[45%] relative flex-col justify-between p-12 overflow-hidden">
-        <div className="absolute inset-0 bg-hero-gradient" />
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(124,58,237,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(124,58,237,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '48px 48px',
-          }}
-        />
-
-        <Orb size={450} color="radial-gradient(circle, #7c3aed, transparent)"
-             className="animate-orb1 top-[-80px] right-[-80px]" />
-        <Orb size={350} color="radial-gradient(circle, #06b6d4, transparent)"
-             className="animate-orb2 bottom-[60px] left-[-60px]" />
+      <div className="hidden lg:flex lg:w-[42%] relative flex-col justify-between p-12 overflow-hidden border-r border-zinc-900">
+        <Orb size={450} color="transparent" className="animate-orb1 top-[-80px] right-[-80px]" />
+        <Orb size={350} color="transparent" className="animate-orb2 bottom-[60px] left-[-60px]" />
 
         <div className="relative z-10 flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-glow-purple">
-              <span className="text-white font-black text-lg">C</span>
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-blue-600 rounded-sm flex items-center justify-center">
+              <span className="text-white font-black text-base">C</span>
             </div>
-            <span className="text-white font-bold text-xl tracking-tight">CP Arena</span>
+            <span className="text-zinc-100 font-bold text-lg tracking-tight">Algo Forge</span>
           </div>
 
           {/* Centered content */}
           <div className="flex-1 flex flex-col justify-center gap-8">
             <div className="animate-fade-in-up">
-              <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-4">
-                Join the Arena
+              <p className="text-blue-500 text-xs font-semibold tracking-widest uppercase mb-4">
+                AlgoForge
               </p>
-              <h1 className="text-4xl font-black text-white leading-tight mb-4">
-                Your journey to the{' '}
-                <span className="gradient-text">top starts here.</span>
+              <h1 className="text-4xl font-black text-zinc-100 leading-tight mb-4">
+                Your next<br />
+                <span className="text-blue-500">breakthrough</span><br />
+                starts here.
               </h1>
-              <p className="text-slate-400 leading-relaxed">
-                Create your account, link your Codeforces profile, and start competing in
-                custom ICPC-style contests with friends.
+              <p className="text-zinc-500 leading-relaxed text-sm">
+                Track progress, host contests, and stay motivated with friends.
               </p>
             </div>
 
-            {/* Security badge */}
-            <div className="glass rounded-2xl p-5 animate-fade-in-up"
-                 style={{ animationDelay: '0.1s' }}>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                  <Shield size={16} className="text-emerald-400" />
+            {/* Security info */}
+            <div className="border border-zinc-800 rounded-sm p-4">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-7 h-7 border border-zinc-700 rounded-sm flex items-center justify-center">
+                  <Shield size={14} className="text-green-400" />
                 </div>
-                <p className="text-white font-semibold text-sm">Secure & Private</p>
+                <p className="text-zinc-200 font-semibold text-sm">Secure & Private</p>
               </div>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {[
                   'Passwords hashed with bcrypt (12 rounds)',
                   'JWT access + refresh token rotation',
                   'Your CF handle is never stored insecurely',
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-slate-400 text-xs">
-                    <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
+                  <li key={item} className="flex items-center gap-2 text-zinc-500 text-xs">
+                    <CheckCircle2 size={11} className="text-green-400 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -250,9 +231,9 @@ const Register = () => {
             </div>
 
             {/* Stat */}
-            <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <p className="text-4xl font-black gradient-text">Free Forever</p>
-              <p className="text-slate-500 text-sm mt-1">No credit card required.</p>
+            <div>
+              <p className="text-3xl font-black text-blue-400">Free Forever</p>
+              <p className="text-zinc-600 text-sm mt-1">No credit card required.</p>
             </div>
           </div>
         </div>
@@ -261,52 +242,50 @@ const Register = () => {
       {/* ── RIGHT FORM PANEL ───────────────────────────────────────────── */}
       <div className="flex-1 flex items-center justify-center px-6 py-10 relative overflow-y-auto">
 
-        {/* Mobile orbs */}
+        {/* Mobile orbs — hidden */}
         <div className="lg:hidden">
-          <Orb size={250} color="radial-gradient(circle, #7c3aed, transparent)"
-               className="animate-orb1 top-0 right-0" />
-          <Orb size={200} color="radial-gradient(circle, #06b6d4, transparent)"
-               className="animate-orb2 bottom-0 left-0" />
+          <Orb size={250} color="transparent" className="animate-orb1 top-0 right-0" />
+          <Orb size={200} color="transparent" className="animate-orb2 bottom-0 left-0" />
         </div>
 
-        <div className="w-full max-w-md animate-slide-in-right relative z-10">
+        <div className="w-full max-w-sm animate-fade-in-up relative z-10">
 
           {/* Mobile logo */}
-          <div className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
-              <span className="text-white font-black">C</span>
+          <div className="flex items-center gap-2 mb-8 lg:hidden">
+            <div className="w-8 h-8 bg-blue-600 rounded-sm flex items-center justify-center">
+              <span className="text-white font-black text-sm">C</span>
             </div>
-            <span className="text-white font-bold text-lg">CP Arena</span>
+            <span className="text-zinc-100 font-bold">Algo Forge</span>
           </div>
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-3xl font-black text-white mb-2">Create account</h2>
-            <p className="text-slate-400 text-sm">
+            <h2 className="text-2xl font-bold text-zinc-100 mb-1.5">Create account</h2>
+            <p className="text-zinc-500 text-sm">
               Set up your profile in under 60 seconds.
             </p>
           </div>
 
           {/* Server error */}
           {serverError && (
-            <div className="alert-error mb-6 animate-fade-in-up" role="alert">
-              <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <div className="alert-error mb-5" role="alert">
+              <AlertCircle size={15} className="mt-0.5 shrink-0" />
               <span>{serverError}</span>
             </div>
           )}
 
           {/* Form */}
-          <form id={formId} onSubmit={handleSubmit} noValidate className="space-y-4">
+          <form id={formId} onSubmit={handleSubmit} noValidate className="space-y-3.5">
 
             {/* Handle */}
             <Field
               id={`${formId}-handle`}
-              label="Handle (your username on CP Arena)"
+              label="Handle (your username on Algo Forge)"
               hint="3–24 chars. Letters, numbers, _, ., - only."
               error={fieldErrors.handle}
             >
               <div className="relative">
-                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                 <input
                   id={`${formId}-handle`}
                   type="text"
@@ -314,7 +293,7 @@ const Register = () => {
                   placeholder="e.g. tourist"
                   value={form.handle}
                   onChange={handleChange('handle')}
-                  className={`input-field pl-11 ${fieldErrors.handle ? 'border-red-500/50' : ''}`}
+                  className={`input-field pl-9 ${fieldErrors.handle ? 'border-red-800' : ''}`}
                   disabled={isLoading}
                 />
               </div>
@@ -327,7 +306,7 @@ const Register = () => {
               error={fieldErrors.email}
             >
               <div className="relative">
-                <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                 <input
                   id={`${formId}-email`}
                   type="email"
@@ -335,7 +314,7 @@ const Register = () => {
                   placeholder="you@example.com"
                   value={form.email}
                   onChange={handleChange('email')}
-                  className={`input-field pl-11 ${fieldErrors.email ? 'border-red-500/50' : ''}`}
+                  className={`input-field pl-9 ${fieldErrors.email ? 'border-red-800' : ''}`}
                   disabled={isLoading}
                 />
               </div>
@@ -349,14 +328,14 @@ const Register = () => {
               error={fieldErrors.codeforcesHandle}
             >
               <div className="relative">
-                <Code2 size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Code2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                 <input
                   id={`${formId}-cf`}
                   type="text"
                   placeholder="Your Codeforces handle"
                   value={form.codeforcesHandle}
                   onChange={handleChange('codeforcesHandle')}
-                  className={`input-field pl-11 ${fieldErrors.codeforcesHandle ? 'border-red-500/50' : ''}`}
+                  className={`input-field pl-9 ${fieldErrors.codeforcesHandle ? 'border-red-800' : ''}`}
                   disabled={isLoading}
                 />
               </div>
@@ -369,7 +348,7 @@ const Register = () => {
               error={fieldErrors.password}
             >
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                 <input
                   id={`${formId}-password`}
                   type={showPw ? 'text' : 'password'}
@@ -377,29 +356,29 @@ const Register = () => {
                   placeholder="Min. 6 characters"
                   value={form.password}
                   onChange={handleChange('password')}
-                  className={`input-field pl-11 pr-11 ${fieldErrors.password ? 'border-red-500/50' : ''}`}
+                  className={`input-field pl-9 pr-9 ${fieldErrors.password ? 'border-red-800' : ''}`}
                   disabled={isLoading}
                 />
                 <button type="button" onClick={() => setShowPw((v) => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-300 transition-colors"
                         aria-label={showPw ? 'Hide password' : 'Show password'}>
-                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
 
               {/* Password strength bar */}
               {form.password && (
                 <div className="mt-2">
-                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-0.5 w-full bg-zinc-800 overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all duration-300 ${strength.color} ${strength.width}`}
+                      className={`h-full transition-all duration-300 ${strength.color} ${strength.width}`}
                     />
                   </div>
                   <p className={`text-xs mt-1 font-medium ${
                     strength.score <= 1 ? 'text-red-400'
                     : strength.score === 2 ? 'text-amber-400'
                     : strength.score === 3 ? 'text-blue-400'
-                    : 'text-emerald-400'
+                    : 'text-green-400'
                   }`}>
                     {strength.label}
                   </p>
@@ -414,7 +393,7 @@ const Register = () => {
               error={fieldErrors.confirmPassword}
             >
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                 <input
                   id={`${formId}-confirm`}
                   type={showConfPw ? 'text' : 'password'}
@@ -422,19 +401,19 @@ const Register = () => {
                   placeholder="Repeat your password"
                   value={form.confirmPassword}
                   onChange={handleChange('confirmPassword')}
-                  className={`input-field pl-11 pr-11 ${fieldErrors.confirmPassword ? 'border-red-500/50' : ''}`}
+                  className={`input-field pl-9 pr-9 ${fieldErrors.confirmPassword ? 'border-red-800' : ''}`}
                   disabled={isLoading}
                 />
                 <button type="button" onClick={() => setShowConfPw((v) => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-300 transition-colors"
                         aria-label={showConfPw ? 'Hide' : 'Show'}>
-                  {showConfPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showConfPw ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
 
               {/* Passwords match indicator */}
               {form.confirmPassword && !fieldErrors.confirmPassword && (
-                <p className="flex items-center gap-1 text-xs text-emerald-400 mt-1.5">
+                <p className="flex items-center gap-1 text-xs text-green-400 mt-1.5">
                   <CheckCircle2 size={11} />
                   Passwords match
                 </p>
@@ -446,27 +425,27 @@ const Register = () => {
               type="submit"
               id="register-submit-btn"
               disabled={isLoading}
-              className="btn-primary w-full !mt-6"
+              className="btn-primary w-full !mt-5"
             >
               {isLoading ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Creating account…
                 </>
               ) : (
                 <>
                   Create Account
-                  <ArrowRight size={16} />
+                  <ArrowRight size={14} />
                 </>
               )}
             </button>
           </form>
 
           {/* Login CTA */}
-          <p className="text-center text-slate-400 text-sm mt-6">
+          <p className="text-center text-zinc-500 text-sm mt-5">
             Already have an account?{' '}
             <Link to="/login"
-                  className="text-violet-400 hover:text-violet-300 font-semibold transition-colors">
+                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
               Sign in →
             </Link>
           </p>

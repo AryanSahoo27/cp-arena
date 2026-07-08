@@ -1,27 +1,32 @@
-# React + TypeScript + Vite
+# Algo Forge - Client Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React and Vite frontend for Algo Forge. It features a custom high-contrast dark mode design system and real-time syncing with the Codeforces API.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
+* **Framework:** React 18 + Vite
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **External APIs:** Codeforces Public API
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Environment Variables
+Create a `.env` file in the root of the `frontend` directory. 
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+Point this to your local backend during development, or your Render URL in production
+```env
+VITE_API_URL=http://localhost:5001/api
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## 🏃 Available Scripts
+
+In the frontend directory, you can run:
+
+* `npm install`: Installs all required dependencies.
+* `npm run dev`: Starts the Vite development server on port 5173.
+* `npm run build`: Compiles the TypeScript and builds the app for production into the `dist` folder.
+* `npm run lint`: Runs ESLint to catch code quality issues.
+
+## 🎨 Design System
+The UI strictly adheres to a custom Tailwind configuration.
+* **Primary Font:** Inter (for UI elements and prose).
+* **Data Font:** JetBrains Mono (for usernames, ratings, problem IDs, and stats).
